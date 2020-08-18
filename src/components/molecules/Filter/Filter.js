@@ -24,10 +24,17 @@ export default function Filter(props) {
   const [clicked, setClicked] = useState(false);
   const [item, setItem] = useState(null);
 
-  const toggleSelected = (item) => {
+  const setSelected = (item) => {
+    props.onClick(item.title);
     setItem(item);
   };
+
   const resetFilter = () => {
+    if (props.title === "최신순") {
+      props.onClick("최신순");
+    } else {
+      props.onClick();
+    }
     setItem(null);
     setClicked(false);
   };
@@ -82,7 +89,7 @@ export default function Filter(props) {
           <DropdownMenu
             activeMenu={props.activeMenu}
             data={props.data}
-            toggleSelected={toggleSelected}
+            setSelected={setSelected}
           ></DropdownMenu>
         )}
       </Wrapper>
@@ -92,14 +99,14 @@ export default function Filter(props) {
   return (
     <Wrapper
       onClick={() => openMenu()}
-      width="fit-content"
+      width={props.width}
+      height={props.height}
       max-height="1.6rem"
-      height="1.6rem"
       border="0.04rem"
       borderColor="#d3d4d8"
       backgroundColor={background}
     >
-      <Text line="1.08rem" level={3} color="#232735">
+      <Text line={props.line} level={props.level} color="#232735">
         {item ? item.title : props.title}
       </Text>
       {icon}
@@ -107,7 +114,7 @@ export default function Filter(props) {
         <DropdownMenu
           activeMenu={props.activeMenu}
           data={props.data}
-          toggleSelected={toggleSelected}
+          setSelected={setSelected}
         ></DropdownMenu>
       )}
     </Wrapper>

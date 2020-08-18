@@ -4,7 +4,7 @@ import Top from "../molecules/ProjectBlock/Top";
 import Bottom from "../molecules/ProjectBlock/Bottom";
 import Wrapper from "../atoms/ProjectBlock";
 
-export default function ProjectBlock() {
+export default function ProjectBlock(props) {
   return (
     <Wrapper>
       <Top></Top>
