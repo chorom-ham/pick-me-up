@@ -1,76 +1,62 @@
 import styled from "styled-components";
 import Text from "../../atoms/Text";
 import Top from "../../atoms/Modal/Top";
-import Profile from "../Profile";
-import Filterinfo from "../FilterInfo";
-import { useDispatch, useSelector } from "react-redux";
+import ProfileHolder from "../../atoms/ImageHolder/Profile";
+import FilterInfo from "../FilterInfo";
 
-export default function ModalTop(props) {
-  const userInfo = useSelector((state) => state.user);
-  const userData = userInfo.userData;
+function ModalTop(props) {
   return (
-    <Top hight="4rem">
-      <Div>
-        <TitleFilterWrapper>
-          <TitleWrapper>
-            <Text level={12} color="#9c69e2" weight={800}>
-              Title
-            </Text>
-          </TitleWrapper>
-          <Filterinfo type={props.type}></Filterinfo>
-        </TitleFilterWrapper>
-        <ProfileBox>
-          <Profile
-            direction="column"
-            size="2rem"
-            profileImage={userData.profilePic}
-          ></Profile>
-          <TextDiv>
-            <Text level={3} weight={800}>
-              {userData.name}
-            </Text>
-          </TextDiv>
-        </ProfileBox>
-      </Div>
+    <Top>
+      <TitleFilterWrapper>
+        <TitleWrapper>
+          <Text level={12} color="#9c69e2" weight={800}>
+            {props.title}
+          </Text>
+        </TitleWrapper>
+        <FilterInfo
+          type={props.type}
+          category={props.category}
+          field={props.field}
+          region={props.region}
+          projectCategory={props.projectCategory}
+        ></FilterInfo>
+      </TitleFilterWrapper>
+      <ProfileBox>
+        <ProfileHolder size="3rem" noMargin={true}>
+          <Img src={props.profileImage}></Img>
+        </ProfileHolder>
+      </ProfileBox>
     </Top>
   );
 }
 
-const Div = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-const TextDiv = styled.div`
-  width: 2rem;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  margin: 0 0.3rem 0 0;
-`;
+export default React.memo(ModalTop);
+
 const TitleWrapper = styled.div`
-  width: 30rem;
+  width: 100%;
   height: fit-content;
   display: flex;
   align-items: left;
+  padding-right: 1.5rem;
   margin: 0 0 0.5rem 0rem;
 `;
 
 const TitleFilterWrapper = styled.div`
   width: 100%;
-  height: 3rem;
   display: flex;
   align-items: left;
-  margin: 0 0 1rem 0rem;
   flex-direction: column;
 `;
+
 const ProfileBox = styled.div`
   width: 3rem;
-  height: 3rem;
   display: flex;
   align-items: center;
   flex-direction: column;
+  justify-content: center;
+`;
+
+const Img = styled.img`
+  width: 100%;
+  height: 100%;
 `;

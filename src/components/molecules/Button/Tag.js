@@ -1,58 +1,63 @@
 import Text from "../../atoms/Text";
 import Wrapper from "../../atoms/Button/Tag";
-import Link from "next/link";
 import styled from "styled-components";
 import IconX from "../../atoms/Icon/X";
-export default function Button(props) {
+
+function Button(props) {
+  let background = "#c8acee";
+  let bordercolor = "#c8acee";
+  let textcolor = "#fff";
+  if (props.tagtype === "modalwrite") {
+    background = "#f0f1f3";
+    bordercolor = "#d3d4d8";
+    textcolor = "#232735";
+  } else if (props.tagtype === "modalview") {
+    background = "#fff";
+    bordercolor = "#d3d4d8";
+    textcolor = "#d3d4d8";
+  }
   return (
-    <Link href={props.link}>
-      <A>
-        <Wrapper
-          backgroundColor={props.ismodal === "modal" ? "#f0f1f3" : "#c8acee"}
-        >
-          <Div>
-            <Text
-              level={0}
-              color={props.ismodal === "modal" ? "#232735" : "#fff"}
-              align="center"
-            >
-              {props.text}
-            </Text>
-            <IconButton
-              onClick={(e) => {
-                e.preventDefault();
-                props.removeTag(props.key);
+    <Wrapper backgroundColor={background} borderColor={bordercolor}>
+      <Div>
+        <Text level={0.5} color={textcolor} align="center">
+          {props.text}
+        </Text>
+        {props.ismodal && (
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault();
+              props.removeTag();
+            }}
+          >
+            <IconX
+              style={{
+                width: "0.6rem",
+                height: "0.6rem",
+                marginLeft: "0.2rem",
               }}
-            >
-              {props.ismodal && (
-                <IconX
-                  style={{
-                    width: "0.5rem",
-                    height: "0.5rem",
-                    margin: "0.25rem 0 0 0.3rem",
-                  }}
-                  fill="#232735"
-                ></IconX>
-              )}
-            </IconButton>
-          </Div>
-        </Wrapper>
-      </A>
-    </Link>
+              fill="#232735"
+            ></IconX>
+          </IconButton>
+        )}
+      </Div>
+    </Wrapper>
   );
 }
 
-const A = styled.a``;
+export default React.memo(Button);
 
 const IconButton = styled.div`
   width: fit-content;
   height: fit-content;
   flex-direction: row;
   display: flex;
+  align-items: center;
+  justify-content: center;
 `;
+
 const Div = styled.div`
   width: fit-content;
-  height: fit-content;
   flex-direction: row;
   display: flex;
+  align-items: center;
 `;

@@ -6,35 +6,18 @@ import { ALIGN } from "../molecules/Filter/ItemData";
 import ProjectList from "./ProjectList";
 import WriteButton from "../molecules/Button/Write";
 import ModalWrite from "../organisms/ModalWrite";
-import BottomButtons from "../organisms/BottomButtons";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-export default function ProjectBody() {
-  const [category, setCategory] = useState();
-  const [field, setField] = useState();
-  const [region, setRegion] = useState();
-  const [projectType, setProjectType] = useState();
+function ProjectBody(props) {
+  const [category, setCategory] = useState("");
+  const [field, setField] = useState("");
+  const [region, setRegion] = useState("");
+  const [projectType, setProjectType] = useState("");
   const [sort, setSort] = useState("최신순");
-  const [query, setQuery] = useState();
-
-  const [viewVisible, setViewVisible] = useState(false);
+  const [query, setQuery] = useState("");
   const [writeVisible, setWriteVisible] = useState(false);
-
-  const openView = () => {
-    setViewVisible(true);
-  };
-  const openWrite = () => {
-    setWriteVisible(true);
-  };
-
-  const closeView = () => {
-    setViewVisible(false);
-  };
-  const closeWrite = () => {
-    setWriteVisible(false);
-  };
-
   const isSignedIn = useSelector((state) => state.user.isSignedIn);
+
   return (
     <>
       <FilterSearch
@@ -62,22 +45,27 @@ export default function ProjectBody() {
             projectType={projectType}
             query={query}
             sort={sort}
+            reload={props.reload}
           ></ProjectList>
-          <BottomButtons></BottomButtons>
         </InnerWrapper>
       </Wrapper>
-      {isSignedIn && <WriteButton openWrite={openWrite}></WriteButton>}
+      {isSignedIn && !writeVisible && !props.viewVisible && (
+        <WriteButton openWrite={() => setWriteVisible(true)}></WriteButton>
+      )}
       {writeVisible && (
         <ModalWrite
-          visible={writeVisible}
-          maskClosable={true}
-          onClose={closeWrite}
           type="project"
+          visible={writeVisible}
+          onClose={() => setWriteVisible(false)}
+          reload={props.reload}
+          setReload={props.setReload}
         ></ModalWrite>
       )}
     </>
   );
 }
+
+export default React.memo(ProjectBody);
 
 const Div = styled.div`
   width: 100%;
@@ -90,10 +78,8 @@ const Div = styled.div`
 
 const InnerWrapper = styled.div`
   margin: 0 4rem 0 4rem;
-  max-width: 1200px;
+  max-width: 92%;
   width: 48rem;
-  flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   position: relative;
@@ -102,10 +88,11 @@ const InnerWrapper = styled.div`
 
 const Wrapper = styled.div`
   background-color: #f0f8fd;
-  justify-content: center;
   width: 100%;
+  min-height: 30rem;
   align-items: center;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   box-sizing: border-box;
 `;

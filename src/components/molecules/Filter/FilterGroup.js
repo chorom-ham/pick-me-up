@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Filter from "./Filter";
 import { PROJECTTYPE, FIELD, REGION, CATEGORY } from "./ItemData";
 
-export default function FilterGroup(props) {
+function FilterGroup(props) {
   const category = "카테고리";
   const region = "지역";
   const field = "구인분야";
@@ -19,6 +19,7 @@ export default function FilterGroup(props) {
         activeMenu="category"
         data={CATEGORY}
         onClick={props.setCategory}
+        value={props.category}
       ></Filter>
       <Filter
         width={props.width}
@@ -29,6 +30,7 @@ export default function FilterGroup(props) {
         activeMenu="field"
         data={FIELD}
         onClick={props.setField}
+        value={props.field}
       ></Filter>
       {props.type === "project" && (
         <>
@@ -41,6 +43,7 @@ export default function FilterGroup(props) {
             activeMenu="region"
             data={REGION}
             onClick={props.setRegion}
+            value={props.region}
           ></Filter>
           <Filter
             width={props.width}
@@ -51,6 +54,7 @@ export default function FilterGroup(props) {
             activeMenu="projecttype"
             data={PROJECTTYPE}
             onClick={props.setProjectType}
+            value={props.projectType}
           ></Filter>
         </>
       )}
@@ -58,12 +62,13 @@ export default function FilterGroup(props) {
   );
 }
 
+export default React.memo(FilterGroup);
+
 const FilterWrapper = styled.div`
-  width: 22rem;
+  width: fit-content;
   height: 1.6rem;
   justify-content: left;
   align-items: center;
   display: flex;
   flex-direction: row;
-  margin: 0 15rem 0 0rem;
 `;

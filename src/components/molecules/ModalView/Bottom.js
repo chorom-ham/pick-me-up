@@ -1,60 +1,77 @@
 import styled from "styled-components";
+import { useState } from "react";
 import Text from "../../atoms/Text";
-import Comment from "../../organisms/Comment/Comment";
-import MoreButton from "../Button/More";
-import CommentWrite from "../../organisms/Comment/CommentWrite";
+import Comment from "../../molecules/Comment/Comment";
+import CommentWrite from "../../molecules/Comment/CommentWrite";
 
-export default function ModalBottom(props) {
-	return (
-		<Bottom>
-			<Div>
-				<Text level={4} weight={500} color="#9c69e2">
-					{props.count}
-				</Text>
-				<Text level={4} weight={500} color="#232735">
-					Comments
-				</Text>
-			</Div>
-			<Comment></Comment>
-			<Comment></Comment>
-			<Comment></Comment>
-			<ButtonWrapper>
-				<MoreButton link=""></MoreButton>
-			</ButtonWrapper>
-			<CommentWrite></CommentWrite>
-		</Bottom>
-	);
+function ModalBottom(props) {
+  //수정 댓글 아이디 받아오는 state
+  const [cidUpdate, setCidUpdate] = useState("");
+  //수정 댓글 본문 받아오는 state
+  const [contentUpdate, setContentUpdate] = useState("");
+  const [edit, setEdit] = useState(false);
+
+  return (
+    <Bottom>
+      <Div>
+        <Text level={4} weight={500} color="#9c69e2">
+          {props.commentsNum}
+        </Text>
+        &nbsp;
+        <Text level={4} weight={500} color="#232735">
+          {props.commentsNum < 2 ? "Comment" : "Comments"}
+        </Text>
+      </Div>
+      {props.comments &&
+        props.comments.map((item, index) => (
+          <Comment
+            type={props.type}
+            comment={item.content}
+            date={item.createdDate}
+            userInfo={item.user}
+            id={item.id}
+            key={index}
+            pid={props.pid}
+            setCidUpdate={setCidUpdate}
+            setContentUpdate={setContentUpdate}
+            setEdit={setEdit}
+            modalReload={props.modalReload}
+            setModalReload={props.setModalReload}
+          ></Comment>
+        ))}
+      <CommentWrite
+        type={props.type}
+        pid={props.pid}
+        contentUpdate={contentUpdate}
+        setContentUpdate={setContentUpdate}
+        edit={edit}
+        pid={props.pid}
+        cid={cidUpdate}
+        setEdit={setEdit}
+        modalReload={props.modalReload}
+        setModalReload={props.setModalReload}
+      ></CommentWrite>
+    </Bottom>
+  );
 }
 
+export default React.memo(ModalBottom);
+
 const Div = styled.div`
-	width: 5.5rem;
-	height: 1.6rem;
-	justify-content: space-between;
-	align-items: center;
-	display: flex;
-	flex-direction: row;
-`;
-const Bottom = styled.div`
-	width: 100%;
-	height: fit-content;
-	background-color: #ffffff;
-	box-sizing: border-box;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	flex-direction: column;
-	padding: 1rem 1rem 1rem 1rem;
-	border-top: 0.07rem solid #d3d4d8;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
 `;
 
-const ButtonWrapper = styled.button`
-	width: 100%;
-	height: 1rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: row;
-	margin: 1rem 0 0 0;
-	border: none;
-	background-color: transparent;
+const Bottom = styled.div`
+  width: 100%;
+  height: fit-content;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-direction: column;
+  padding: 0.5rem 1.5rem 1rem 1.5rem;
+  border-top: 0.07rem solid #d3d4d8;
 `;

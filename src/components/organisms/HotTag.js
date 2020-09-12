@@ -6,6 +6,7 @@ import Icon from "../atoms/Icon/Tag";
 import styled from "styled-components";
 import Text from "../atoms/Text";
 import Tag from "../molecules/Button/Tag";
+import Skeleton from "../_skeletons/main/Tag";
 
 export default function HotTag() {
   const { tags, isLoading } = getHotTags();
@@ -27,10 +28,24 @@ export default function HotTag() {
             </Text>
           </Div>
           <Row>
+            {isLoading && (
+              <>
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+              </>
+            )}
             {!isLoading &&
               tags &&
               tags.content.map((item, index) => (
-                <Tag key={index} text={item.name} link=""></Tag>
+                <Tag key={index} text={item.name}></Tag>
               ))}
           </Row>
         </Col>
@@ -40,16 +55,16 @@ export default function HotTag() {
 }
 
 const getHotTags = () => {
-  const [tags, setTags] = useState(null);
+  const [tags, setTags] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const result = await axios.get(
-          `${process.env.API_HOST}/tags?size=10&sort=score,desc`
-        );
+        const result = await axios.post(`${process.env.API_HOST}/tags`, {
+          size: 10,
+        });
         setTags(result.data);
         setIsLoading(false);
       } catch (error) {
@@ -71,7 +86,7 @@ const Wrapper = styled.div`
 `;
 
 const InnerWrapper = styled.div`
-  max-width: 1200px;
+  max-width: 92%;
   width: 48rem;
   height: 100%;
   align-items: center;

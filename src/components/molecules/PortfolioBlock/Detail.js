@@ -1,30 +1,35 @@
 import styled, { css } from "styled-components";
 import Text from "../../atoms/Text";
-import Profile from "../Profile";
-import ViewCount from "../ViewCount";
-import CommentCount from "../CommentCount";
+import ViewCount from "../Count/ViewCount";
+import CommentCount from "../Count/CommentCount";
+import Profile from "../../molecules/Profile";
 
 function Detail(props) {
   return (
     <DetailWrapper y={props.y}>
       <Row>
         <Text level={3} weight="bold" color="#232735">
-          Title
+          {props.title}
         </Text>
       </Row>
       <Row>
-        <Profile name="name" size="0.8rem" level={1}></Profile>
+        <Profile
+          size="1rem"
+          level={1}
+          name={props.name}
+          profileImage={props.profileImage}
+        ></Profile>
         <Div>
-          <ViewCount count={10}></ViewCount>
+          <ViewCount count={props.viewNum}></ViewCount>
           &nbsp;
-          <CommentCount count={10}></CommentCount>
+          <CommentCount count={props.commentsNum}></CommentCount>
         </Div>
       </Row>
     </DetailWrapper>
   );
 }
 
-export default Detail;
+export default React.memo(Detail);
 
 const DetailWrapper = styled.div`
   width: 100%;

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Logo from "../molecules/Button/Logo";
-import Wrapper from "../atoms/gnb";
 import MainMenu from "../molecules/menu/Main";
 import LogInButton from "../molecules/Button/LogIn";
+import LogOutButton from "../molecules/Button/LogOut";
 import { useSelector } from "react-redux";
 import Profile from "../molecules/Profile";
 
@@ -18,12 +18,15 @@ export default function GlobalNavigationBar() {
         <MainMenu></MainMenu>
         <ProfileWrapper>
           {state.isSignedIn ? (
-            <Profile
-              level={1}
-              size="1.4rem"
-              name={state.userData.name}
-              profileImage={state.userData.profilePic}
-            ></Profile>
+            <>
+              <Profile
+                level={1}
+                size="1.4rem"
+                name={state.userData.username}
+                profileImage={state.userData.image}
+              ></Profile>
+              <LogOutButton></LogOutButton>
+            </>
           ) : (
             <LogInButton></LogInButton>
           )}
@@ -34,7 +37,7 @@ export default function GlobalNavigationBar() {
 }
 
 const InnerWrapper = styled.div`
-  max-width: 1200px;
+  max-width: 92%;
   width: 48rem;
   height: 100%;
   align-items: center;
@@ -55,6 +58,17 @@ const LogoWrapper = styled.div`
 const ProfileWrapper = styled.div`
   width: 20rem;
   justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 4rem;
+  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  align-items: center;
+  justify-content: center;
   display: flex;
   flex-direction: row;
 `;

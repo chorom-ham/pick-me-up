@@ -2,9 +2,9 @@ import Text from "../../atoms/Text";
 import Wrapper from "../../atoms/Button/Pill";
 import Icon from "../../atoms/Icon/Plus";
 
-export default function Button(props) {
+function Button(props) {
   return (
-    <Wrapper center={true}>
+    <Wrapper center={true} onClick={props.onClick}>
       <Text level={1}>{props.text}</Text>
       <Icon
         style={{
@@ -17,3 +17,5 @@ export default function Button(props) {
     </Wrapper>
   );
 }
+
+export default React.memo(Button);

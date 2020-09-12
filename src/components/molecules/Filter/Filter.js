@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Text from "../../atoms/Text";
 import Wrapper from "../../atoms/Filter/Filter";
@@ -9,7 +9,7 @@ import Icondown from "../../atoms/Icon/Filter/Down";
 import IconX from "../../atoms/Icon/X";
 import DropdownMenu from "../Filter/DropdownMenu";
 
-export default function Filter(props) {
+function Filter(props) {
   const iconStyle = {
     width: "0.6rem",
     height: "0.4rem",
@@ -22,10 +22,14 @@ export default function Filter(props) {
   };
 
   const [clicked, setClicked] = useState(false);
-  const [item, setItem] = useState(null);
+  const [item, setItem] = useState("");
 
   const setSelected = (item) => {
-    props.onClick(item.title);
+    if (item) {
+      props.onClick(item.title);
+    } else {
+      props.onClick("");
+    }
     setItem(item);
   };
 
@@ -33,9 +37,9 @@ export default function Filter(props) {
     if (props.title === "최신순") {
       props.onClick("최신순");
     } else {
-      props.onClick();
+      props.onClick("");
     }
-    setItem(null);
+    setItem("");
     setClicked(false);
   };
 
@@ -48,6 +52,12 @@ export default function Filter(props) {
   let icon = <Icondownline style={iconStyle} fill="#8b90a0"></Icondownline>;
   let iconAlign = <Icondown style={iconStyle} fill="#232735"></Icondown>;
   let backgroundAlign = "#ffffff";
+
+  useEffect(() => {
+    if (!item && props.value) {
+      setSelected({ title: props.value });
+    }
+  }, [props.value]);
 
   if (item) {
     icon = (
@@ -120,6 +130,8 @@ export default function Filter(props) {
     </Wrapper>
   );
 }
+
+export default React.memo(Filter);
 
 const Button = styled.div`
   display: flex;
