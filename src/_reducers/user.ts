@@ -1,11 +1,11 @@
 import { AnyAction } from "redux";
-import { LOGIN_USER, LOGOUT_USER } from "../_actions/types";
 import Cookies from "js-cookie";
-import { State } from "../types/User";
+import { LOGIN_USER, LOGOUT_USER } from "../_actions/types";
+import UserState from "../types/User";
 
-let userData = Cookies.get("userData");
+const userData = Cookies.get("userData");
 
-let initialState: State;
+let initialState: UserState;
 
 if (userData) {
   initialState = {
@@ -16,14 +16,14 @@ if (userData) {
   initialState = {
     isSignedIn: false,
     userData: {
-      username: "",
-      email: "",
-      image: "",
+      username: null,
+      email: null,
+      image: null,
     },
   };
 }
 
-const reducer = (state: State = initialState, action: AnyAction) => {
+const reducer = (state: UserState = initialState, action: AnyAction) => {
   switch (action.type) {
     case LOGIN_USER: {
       return { ...state, isSignedIn: true, userData: action.payload };

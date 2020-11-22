@@ -8,41 +8,41 @@ import Footer from "../src/components/organisms/Footer";
 
 export default function Portfolio() {
   const router = useRouter();
-  const [update, setUpdate] = useState<boolean>(false); //수정
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [reload, setReload] = useState<number>(0);
   const [modalReload, setModalReload] = useState<number>(0);
 
   return (
     <>
-      {router.query.pid && !update && (
+      {router.query.pid && !isUpdate && (
         <Modal
-          type="portfolio"
-          visible={!!router.query.pid}
+          page="portfolio"
+          isVisible={!!router.query.pid}
           pid={router.query.pid}
           onClose={() => router.push(`/portfolio`)}
-          setUpdate={setUpdate}
+          setIsUpdate={setIsUpdate}
           reload={reload}
           setReload={setReload}
           modalReload={modalReload}
           setModalReload={setModalReload}
         ></Modal>
       )}
-      {update && (
+      {router.query.pid && isUpdate && (
         <UpdateModal
-          type="portfolio"
+          page="portfolio"
           pid={router.query.pid}
           onClose={() => {
-            setUpdate(false);
+            setIsUpdate(false);
             router.push(`/portfolio`);
           }}
-          setUpdate={setUpdate}
+          setIsUpdate={setIsUpdate}
           modalReload={modalReload}
           setModalReload={setModalReload}
         ></UpdateModal>
       )}
       <Gnb></Gnb>
       <PortfolioBody
-        viewVisible={!!router.query.pid}
+        isModalVisible={!!router.query.pid}
         reload={reload}
         setReload={setReload}
       ></PortfolioBody>

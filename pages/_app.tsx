@@ -1,10 +1,10 @@
 import React from "react";
-import App from "next/app";
+import type { AppProps } from "next/app";
 import Head from "next/head";
-import Router from "next/router";
 import styled, { createGlobalStyle } from "styled-components";
-import { wrapper } from "../src/_store";
 import dotenv from "dotenv";
+import Colors from "@colors";
+import { wrapper } from "../src/_store";
 
 dotenv.config();
 
@@ -39,7 +39,7 @@ body {
   padding: 0;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 1rem;
-  background-color:#fff;
+  background-color:${Colors.WHITE};
   min-width: 768px;
 }
 ::-webkit-scrollbar {
@@ -56,32 +56,29 @@ html,
           }
 `;
 
-class PickMeup extends App {
-  render() {
-    const { Component, pageProps } = this.props;
-    return (
-      <>
-        <GlobalStyle />
-        <Head>
-          <title>픽미업, Pick me up</title>
-          <link rel="shortcut icon" href="favicon.ico"></link>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
-            rel="stylesheet"
-          ></link>
-        </Head>
-        <Wrapper>
-          <Component {...pageProps} />
-        </Wrapper>
-      </>
-    );
-  }
+function PickMeUp({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <GlobalStyle />
+      <Head>
+        <title>픽미업, Pick me up</title>
+        <link rel="shortcut icon" href="favicon.ico"></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        ></link>
+      </Head>
+      <Wrapper>
+        <Component {...pageProps} />
+      </Wrapper>
+    </>
+  );
 }
 
 const Wrapper = styled.div`
   width: 100%;
   min-height: 100%;
-  background-color: #fff;
+  background-color: ${Colors.WHITE};
 `;
 
-export default wrapper.withRedux(PickMeup);
+export default wrapper.withRedux(PickMeUp);
