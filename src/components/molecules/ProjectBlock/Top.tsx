@@ -8,13 +8,13 @@ import Profile from "../Profile";
 
 type TopProps = {
   title: string;
-  uid: string;
+  uid: number;
   name: string;
   profileImage?: string;
   category: string;
-  field: string;
+  recruitmentField: string;
   region: string;
-  projectCategory: string;
+  projectSection: string;
   date: string;
 };
 
@@ -24,7 +24,7 @@ function Top(props: TopProps) {
       <Text level={6} weight="bold" color={Colors.DEEP_PURPLE} line={1.17}>
         {props.title}
       </Text>
-      <Link href="/profile/[userID]" as={`/profile/${props.uid}`}>
+      <Link href={`/profile/${props.uid}`} passHref>
         <A>
           <Profile
             size="1rem"
@@ -38,9 +38,9 @@ function Top(props: TopProps) {
         <FilterInfo
           page="project"
           category={props.category}
-          field={props.field}
+          recruitmentField={props.recruitmentField}
           region={props.region}
-          projectCategory={props.projectCategory}
+          projectSection={props.projectSection}
         ></FilterInfo>
         <Text level={1} color={Colors.BLACK}>
           {props.date}
@@ -70,4 +70,6 @@ const BottomWrapper = styled.div`
   align-items: center;
 `;
 
-const A = styled.a``;
+const A = styled.a`
+  text-decoration: none;
+`;

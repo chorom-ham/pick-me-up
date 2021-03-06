@@ -7,17 +7,17 @@ import MoreButton from "../Button/ViewMore";
 export type BottomProps = {
   viewNum: number;
   commentsNum: number;
-  pid: string;
+  pid: number;
 };
 
 function Bottom(props: BottomProps) {
   return (
     <Wrapper>
-      <Div>
+      <CountWrapper>
         <ViewCount count={props.viewNum}></ViewCount>
         &nbsp;
         <CommentCount count={props.commentsNum}></CommentCount>
-      </Div>
+      </CountWrapper>
       <MoreButton pid={props.pid}></MoreButton>
     </Wrapper>
   );
@@ -37,7 +37,7 @@ const Wrapper = styled.div`
   flex-direction: row;
 `;
 
-const Div = styled.div`
+const CountWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;

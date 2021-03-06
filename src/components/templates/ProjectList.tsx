@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import ProjectHooks from "@src/lib/hooks/Project";
+import duplicate from "@src/lib/utils/duplicate";
 import ProjectBlock from "../organisms/ProjectBlock";
 import NoResult from "../molecules/NoResult";
 import MoreListButton from "../molecules/Button/LoadMore";
@@ -8,22 +9,30 @@ import Skeleton from "../_skeletons/project/ProjectBlock";
 
 type ProjectListProps = {
   category: string;
-  field: string;
+  recruitmentField: string;
   region: string;
-  projectType: string;
+  projectSection: string;
   query: string;
   sort: string;
   reload: number;
 };
 
 function ProjectList(props: ProjectListProps) {
-  const { category, field, region, projectType, query, sort, reload } = props;
+  const {
+    category,
+    recruitmentField,
+    region,
+    projectSection,
+    query,
+    sort,
+    reload,
+  } = props;
   const [limit, setLimit] = useState(10);
   const { isLoading, isError, data } = ProjectHooks.useProjectListGetApi([
     category,
-    field,
+    recruitmentField,
     region,
-    projectType,
+    projectSection,
     query,
     sort,
     limit,
@@ -36,28 +45,15 @@ function ProjectList(props: ProjectListProps) {
 
   const renderBlocks =
     data &&
-    data.pagelist.map((item) => (
+    data.projectList.map((item) => (
       <ProjectBlock key={item.id} {...item}></ProjectBlock>
     ));
 
   if (isLoading) {
-    return (
-      <Wrapper>
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-      </Wrapper>
-    );
+    return <Wrapper>{duplicate(Skeleton, 10)}</Wrapper>;
   }
 
-  if ((data && data.pagelist.length === 0) || isError) {
+  if ((data && data.projectList.length === 0) || isError) {
     return (
       <Wrapper>
         <NoResult></NoResult>
@@ -68,7 +64,7 @@ function ProjectList(props: ProjectListProps) {
   return (
     <>
       <Wrapper>{renderBlocks}</Wrapper>
-      {data && data.pagelist.length < data.nrOfElements && (
+      {data && data.projectList.length < data.totalNum && (
         <MoreWrapper>
           <MoreListButton onClick={loadMoreHandler}></MoreListButton>
         </MoreWrapper>

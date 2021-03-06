@@ -4,19 +4,18 @@ import styled, { css } from "styled-components";
 import Colors from "@colors";
 import { PageType } from "@src/components/atoms/Modal/ModalType";
 import Text from "../../atoms/Text";
-import Top from "../../atoms/Modal/Top";
+import Wrapper from "../../atoms/Modal/Top";
 import FilterInfo from "../FilterInfo";
 
 type ModalTopProps = {
   page: PageType;
   title: string;
   uid: number;
-  name: string;
   profileImage: string;
   category: string;
-  field: string;
-  region: string;
-  projectCategory: string;
+  recruitmentField: string;
+  region?: string;
+  projectSection?: string;
 };
 
 type ProfileHolderProps = {
@@ -27,60 +26,43 @@ type ProfileHolderProps = {
 type ImageProps = {
   src?: string;
 };
+
 function ModalTop(props: ModalTopProps) {
   return (
-    <Top>
+    <Wrapper>
       <TitleFilterWrapper>
-        <TitleWrapper>
-          <Text level={12} color={Colors.DEEP_PURPLE} weight={800}>
-            {props.title}
-          </Text>
-        </TitleWrapper>
+        <Text level={12} color={Colors.DEEP_PURPLE} weight={800}>
+          {props.title}
+        </Text>
         <FilterInfo
           page={props.page}
           category={props.category}
-          field={props.field}
+          recruitmentField={props.recruitmentField}
           region={props.region}
-          projectCategory={props.projectCategory}
+          projectSection={props.projectSection}
         ></FilterInfo>
       </TitleFilterWrapper>
-      <ProfileBox>
-        <Link href="/profile/[userID]" as={`/profile/${props.uid}`}>
-          <A>
-            <ProfileHolder size="3rem" noMargin={true}>
-              <Img src={props.profileImage}></Img>
-            </ProfileHolder>
-          </A>
-        </Link>
-      </ProfileBox>
-    </Top>
+      <Link href={`/profile/${props.uid}`} passHref>
+        <A>
+          <ProfileHolder size="3rem" noMargin={true}>
+            <Img src={props.profileImage}></Img>
+          </ProfileHolder>
+        </A>
+      </Link>
+    </Wrapper>
   );
 }
 
 export default React.memo(ModalTop);
 
-const TitleWrapper = styled.div`
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  align-items: left;
-  padding-right: 1.5rem;
-  margin: 0 0 0.5rem 0rem;
-`;
-
 const TitleFilterWrapper = styled.div`
   width: 100%;
+  height: 3rem;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: left;
-  flex-direction: column;
-`;
-
-const ProfileBox = styled.div`
-  width: 3rem;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+  padding-right: 1.5rem;
 `;
 
 const ProfileHolder = styled.div`
@@ -100,4 +82,6 @@ const Img = styled.img`
   `}
 `;
 
-const A = styled.a``;
+const A = styled.a`
+  text-decoration: none;
+`;

@@ -1,48 +1,92 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import ProjectHooks from "@src/lib/hooks/Project";
+import PortfolioHooks from "@src/lib/hooks/Portfolio";
+import { Tag, Images } from "@src/types/Data";
+import Modal from "../atoms/Modal/index";
 import Top from "../molecules/ModalView/Top";
 import Middle from "../molecules/ModalView/Middle";
 import Bottom from "../molecules/ModalView/Bottom";
 import ProjectSkeleton from "../_skeletons/project/ProjectView";
 import PortfolioSkeleton from "../_skeletons/portfolio/PortfolioView";
-import { ModalProps, PageType } from "../atoms/Modal/ModalType";
-import DataProps from "../../types/Data";
-import Modal from "../atoms/Modal/index";
+import { ModalProps } from "../atoms/Modal/ModalType";
 
 function ModalView(props: ModalProps) {
-  const { data, isLoading } = getData(props.pid, props.page, props.modalReload);
+  let getData;
+  if (props.page === "project") {
+    getData = ProjectHooks.useProjectGetApi;
+  } else if (props.page === "portfolio") {
+    getData = PortfolioHooks.usePortfolioGetApi;
+  }
+  const { isLoading, isError, data } = getData([props.pid, props.modalReload]);
+
+  const tags: Tag[] = [];
+  let originalTags: Tag[] = [];
+  let region: string;
+  let projectSection: string;
+  let image: string;
+  let images: Images[];
+
+  if (data) {
+    if ("projectTags" in data) {
+      originalTags = data.projectTags;
+      region = data.region;
+      projectSection = data.projectSection;
+      image = data.image;
+    } else {
+      originalTags = data.portfolioTags;
+      images = data.images;
+    }
+    originalTags.forEach((tag) => {
+      if (!tags.find((x) => x.id === tag.id)) {
+        tags.push(tag);
+      }
+    });
+  }
+
+  if (isLoading) {
+    return (
+      <>
+        {props.page === "project" && (
+          <ProjectSkeleton
+            isVisible={props.isVisible}
+            onClose={props.onClose}
+          ></ProjectSkeleton>
+        )}
+        {props.page === "portfolio" && (
+          <PortfolioSkeleton
+            isVisible={props.isVisible}
+            onClose={props.onClose}
+          ></PortfolioSkeleton>
+        )}
+      </>
+    );
+  }
+
+  if (isError) alert("에러가 발생했습니다");
 
   return (
     <Modal isVisible={props.isVisible} onClose={props.onClose}>
-      {isLoading && !data && props.page === "project" && (
-        <ProjectSkeleton></ProjectSkeleton>
-      )}
-      {isLoading && !data && props.page === "portfolio" && (
-        <PortfolioSkeleton></PortfolioSkeleton>
-      )}
-      {!isLoading && data && (
+      {data && (
         <>
           <Top
             page={props.page}
             title={data.title}
             uid={data.user.id}
-            name={data.user.username}
             profileImage={data.user.image}
             category={data.category}
-            field={data.huntingField}
-            region={data.region}
-            projectCategory={data.projectCategory}
+            recruitmentField={data.recruitmentField}
+            region={region}
+            projectSection={projectSection}
           ></Top>
           <Middle
             page={props.page}
-            date={data.createdDate}
+            date={data.createdDate.split("T")[0]}
             content={data.content}
-            image={data.image}
+            image={image}
+            images={images}
             userEmail={data.user.email}
             pid={data.id}
-            tags={
-              props.page === "project" ? data.projectTag : data.portfolioTag
-            }
+            tags={tags}
             setUpdate={props.setIsUpdate}
             listReload={props.reload}
             setListReload={props.setReload}
@@ -62,37 +106,3 @@ function ModalView(props: ModalProps) {
 }
 
 export default React.memo(ModalView);
-
-const getData = (
-  pid: string | string[],
-  page: PageType,
-  modalReload: number
-) => {
-  const [data, setData] = useState<DataProps>();
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        if (page === "project") {
-          const result = await axios.get(
-            `${process.env.API_HOST}/projects/${pid}`
-          );
-          setData(result.data);
-          setIsLoading(false);
-        } else if (page === "portfolio") {
-          const result = await axios.get(
-            `${process.env.API_HOST}/portfolios/${pid}`
-          );
-          setData(result.data);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, [modalReload]);
-  return { data, isLoading };
-};

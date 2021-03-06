@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import styled, { css } from "styled-components";
 import Colors from "@colors";
 import Text from "../../atoms/Text";
@@ -10,7 +9,7 @@ import Profile from "../Profile";
 type DetailProps = {
   y: number | string;
   title: string;
-  uid: string;
+  uid: number;
   name: string;
   profileImage?: string;
   viewNum: number;
@@ -26,21 +25,17 @@ function Detail(props: DetailProps) {
         </Text>
       </Row>
       <Row>
-        <Link href="/profile/[userID]" as={`/profile/${props.uid}`}>
-          <A>
-            <Profile
-              size="1rem"
-              level={1}
-              name={props.name}
-              profileImage={props.profileImage}
-            ></Profile>
-          </A>
-        </Link>
-        <Div>
+        <Profile
+          size="1rem"
+          level={1}
+          name={props.name}
+          profileImage={props.profileImage}
+        ></Profile>
+        <CountWrapper>
           <ViewCount count={props.viewNum}></ViewCount>
           &nbsp;
           <CommentCount count={props.commentsNum}></CommentCount>
-        </Div>
+        </CountWrapper>
       </Row>
     </DetailWrapper>
   );
@@ -76,10 +71,8 @@ const Row = styled.div`
   justify-content: space-between;
 `;
 
-const Div = styled.div`
+const CountWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
-
-const A = styled.a``;

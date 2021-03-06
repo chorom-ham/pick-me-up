@@ -2,9 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import Colors from "@colors";
 import HotTagHooks from "@src/lib/hooks/HotTag";
+import duplicate from "@src/lib/utils/duplicate";
 import Icon from "../atoms/Icon/Tag";
 import Text from "../atoms/Text";
-import Tag from "../molecules/Button/Tag";
+import Tag from "../molecules/Tag";
 import Skeleton from "../_skeletons/main/Tag";
 
 export default function HotTag() {
@@ -24,24 +25,11 @@ export default function HotTag() {
           지금 이시간 가장 인기 있는 태그를 확인하세요
         </Text>
         <Row>
-          {isLoading && (
-            <>
-              <Skeleton />
-              <Skeleton />
-              <Skeleton />
-              <Skeleton />
-              <Skeleton />
-              <Skeleton />
-              <Skeleton />
-              <Skeleton />
-              <Skeleton />
-              <Skeleton />
-            </>
-          )}
+          {isLoading && duplicate(Skeleton, 10)}
           {!isLoading &&
             !isError &&
             data &&
-            data.map((item) => <Tag key={item.id} text={item.name}></Tag>)}
+            data.map((item) => <Tag key={item.id} text={item.tagName}></Tag>)}
         </Row>
       </InnerWrapper>
     </Wrapper>
